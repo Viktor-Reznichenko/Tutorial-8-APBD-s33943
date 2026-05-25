@@ -1,0 +1,21 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+
+
+namespace tut_8.Entities_;
+
+[PrimaryKey(nameof(PCId), nameof(ComponentCode))]
+public class PCComponent
+{
+    public int PCId { get; set; }
+    public int ComponentCode { get; set; }
+    
+    public int Amount { get; set; }
+
+    
+    [ForeignKey(nameof(PCId))]
+    public PC PC { get; set; } = null!;
+    [ForeignKey(nameof(ComponentCode))]
+    public Component Component { get; set; } = null!;
+}
