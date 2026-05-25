@@ -9,7 +9,7 @@ namespace tut_8.Entities_;
 public class PCComponent
 {
     public int PCId { get; set; }
-    public int ComponentCode { get; set; }
+    public string ComponentCode { get; set; } = string.Empty;
     
     public int Amount { get; set; }
 
