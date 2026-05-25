@@ -13,6 +13,7 @@ public class PC
     [MaxLength(50)]
     public string Name { get; set; } = string.Empty;
 
+    [Column(TypeName = "float(5)")]
     public double Weight { get; set; }
 
     public int Warranty { get; set; }
@@ -23,5 +24,5 @@ public class PC
     
     public int Stock { get; set; }
 
-    public ICollection<PCComponent> PCComponent { get; set; } = [];
+    public ICollection<PCComponent> PCComponents { get; set; } = [];
 }

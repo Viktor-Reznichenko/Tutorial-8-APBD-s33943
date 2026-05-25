@@ -9,11 +9,11 @@ namespace tut_8.Entities_;
 public class Component
 {
     [Key]
-    [MaxLength(10)]
+    [Column(TypeName = "char(10)")]
     public string Code { get; set; } = string.Empty;
     [MaxLength(300)]
     public string Name { get; set; } = string.Empty;
-    
+    [Column(TypeName = "nvarchar(max)")]
     public string Description { get; set; } = string.Empty;
     
     public int ComponentTypeId { get; set; }
@@ -25,5 +25,5 @@ public class Component
     [ForeignKey(nameof(ComponentManufacturerId))]
     public ComponentManufacturer ComponentManufacturer { get; set; } = null!;
     
-    public ICollection<PCComponent> PCComponent { get; set; } = [];
+    public ICollection<PCComponent> PcComponents { get; set; } = [];
 }

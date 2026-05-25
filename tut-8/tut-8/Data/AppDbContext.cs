@@ -23,6 +23,77 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<PC>(e =>
+        {
+            e.HasKey(p => p.Id);
+            e.Property(p => p.Name)
+                .HasMaxLength(100);
+            e.Property(p => p.Weight)
+                .HasMaxLength(100);
+            e.Property(p => p.CreatedAt).HasColumnType("date");
+            e.Property(p => p.Stock);
+            e.Property(p => p.Warranty);
+
+            e.ToTable("PCs");
+        });
+
+        modelBuilder.Entity<ComponentType>(e =>
+        {
+            e.HasKey(p => p.Id);
+            e.Property(p => p.Abbreviation)
+                .HasMaxLength(30);
+            e.Property(p => p.Name)
+                .HasMaxLength(100);
+            e.ToTable("ComponentTypes");
+            
+        });
+
+        modelBuilder.Entity<ComponentManufacturer>(e =>
+        {
+            e.HasKey(p => p.Id);
+            e.Property(p => p.Abbreviation)
+                .HasMaxLength(30);
+            e.Property(p=> p.FullName)
+                .HasMaxLength(300);
+            e.Property(p => p.FoundationDate).HasColumnType("date");
+            e.ToTable("ComponentManufacturers");
+        });
+
+        modelBuilder.Entity<Component>(e =>
+        {
+            e.HasKey(p => p.Code);
+            e.Property(p => p.Name)
+                .HasMaxLength(300);
+            e.Property(p => p.Description)
+                .HasColumnType("nvarchar(max)");
+            e.HasOne(p=>p.ComponentType)
+                .WithMany(c=>c.Components).
+                HasForeignKey(p => p.ComponentTypeId)
+                .OnDelete(DeleteBehavior.Cascade);
+            e.HasOne(p => p.ComponentManufacturer)
+                .WithMany(c => c.Components)
+                .HasForeignKey(p => p.ComponentManufacturerId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            e.ToTable("Components");
+        });
+
+        modelBuilder.Entity<PCComponent>(e =>
+        {
+            e.HasKey(p => new {p.PCId, p.ComponentCode});
+            e.Property(p => p.Amount);
+            
+            e.HasOne(p=>p.PC)
+                .WithMany(c=>c.PCComponents).
+                HasForeignKey(p => p.PCId)
+                .OnDelete(DeleteBehavior.Cascade);
+            e.HasOne(p => p.Component)
+                .WithMany(c => c.PcComponents)
+                .HasForeignKey(p => p.ComponentCode)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            e.ToTable("PCComponents");
+        });
         modelBuilder.Entity<PC>().HasData(new List<PC>()
         {
             new PC() {Id = 1, Name = "PC Number 1", Weight = 5.1, CreatedAt =  DateTime.Parse("2026-05-07"), Stock = 2, Warranty = 3},
